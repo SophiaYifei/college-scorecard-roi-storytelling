@@ -1,119 +1,128 @@
 # 🎓 College ROI & Fairness — A Data Storytelling Project
 
 ## 📌 What’s this?
-This project quantifies the **return on investment (ROI)** of U.S. college majors using the Dept. of Education’s **College Scorecard** dataset.  
-It explores how ROI varies by field of study and institution type.  
 
-This repository contains:
-- Reproducible code  
-- The processed dataset  
-- Final analysis outputs  
+This project explores the U.S. Department of Education's College Scorecard data to uncover insights about the financial return on investment (ROI) of higher education. Our goal is to tell a data-driven story for prospective students and their families, helping them understand how factors like field of study and institution type relate to post-graduation earnings and debt.
 
----
+Beyond simple ROI calculations, we also investigate potential fairness and equity issues within the data, specifically examining the relationship between the gender composition of an institution and the average earnings of its graduates.
 
-## 1️⃣ Project Overview
 
-**Key Questions**
-- Which college majors pay back the fastest (defined by the ratio of early-career earnings to student debt)?  
-- How does this ROI vary across different types of institutions (e.g., Public vs. Private)?  
+**Public Communication Deliverable:** [Link to my blog post]
 
-**Audience**
-- High school students and parents deciding on majors  
-- Educators and policymakers interested in the value of higher education  
 
-**Deliverables**
-- Public-facing data story (blog post / infographic)  
-- Final presentation  
-- Fully reproducible GitHub repository  
+## 💾 Dataset
 
----
+The data for this analysis is sourced from the U.S. Department of Education's **College Scorecard**. We utilize two main institution-level datasets for our analysis:
 
-## 2️⃣ How to Reproduce
+1.  **Most Recent Data by Field of Study:** This dataset provides detailed information on outcomes like debt and earnings, broken down by field of study within each institution.
+    * **Direct Link:** [https://collegescorecard.ed.gov/data/](https://collegescorecard.ed.gov/data/) (Under "Field of Study")
+2.  **Most Recent Institution-Level Data:** This dataset contains institutional characteristics, including student demographics like gender distribution.
+    * **Direct Link:** [https://collegescorecard.ed.gov/data/](https://collegescorecard.ed.gov/data/) (Under "Institution-Level")
 
-Follow the steps below to replicate the analysis.
+The official data dictionary and glossary of terms can be found here:
+* **Glossary:** [https://collegescorecard.ed.gov/data/glossary/](https://collegescorecard.ed.gov/data/glossary/)
 
-### 🔧 Prerequisites
-- Python **3.8+**  
-- `git` installed on your system  
+*Note: The raw data files are too large to be included in this GitHub repository. However, they are publicly available and will be downloaded automatically when running the 01_preprocess.ipynb and 03_fairness.ipynb.*
 
----
+### 📊 Key Features & Data Dictionary
 
-### 📥 Step 1: Clone the Repository
+This project relies on several key variables from the source data and creates new features to facilitate the analysis.
+
+### 🔑 Engineered Features
+
+These features were created in our notebooks to calculate ROI and analyze fairness.
+
+* **`ROI_EARNINGS_TO_DEBT` (float):** The core metric for our story, representing the return on investment.  
+    * **Formula:** `EARN_MDN_5YR / DEBT_ALL_STGP_ANY_MDN`  
+    * A higher value indicates a better financial return.
+* **`AFFORDABILITY` (categorical):** Classification of repayment burden based on the percentage of income required for a 10-year loan plan.  
+    * **Values:** Very Affordable (<8%), Affordable (8–12%), Moderate (12–20%), Expensive (>20%).
+* **`MAJOR_FIELD` (string):** Grouped academic disciplines (e.g., Engineering, Business, Computer Science, Health), derived from CIP codes for easier comparison.
+* **`women_proportion` (float):** The proportion of undergraduate students who are women at an institution.  
+    * **Source:** Directly from `UGDS_WOMEN`.  
+    * Used in the fairness analysis (`03_fairness.ipynb`).
+* **`avg_earnings` (float):** The average 5-year median earnings of graduates across all programs at an institution.  
+    * Used in the fairness analysis (`03_fairness.ipynb`).
+
+### 📖 Key Source Variables
+
+These are the most important columns from the original College Scorecard data used in our analysis.
+
+* **`INSTNM` (string):** Institution name.  
+* **`CIPDESC` (string):** The description of the academic program (field of study).  
+* **`CONTROL` (string):** The control of the institution (e.g., Public, Private nonprofit, Private for-profit).  
+* **`EARN_MDN_5YR` (float):** Median earnings of graduates 5 years after completion.  
+* **`DEBT_ALL_STGP_ANY_MDN` (float):** Median debt for students who completed the program.  
+* **`UGDS_WOMEN` (float):** Share of undergraduates who are women.  
+* **`TUITIONFEE_IN` (float):** In-state tuition fee.  
+
+
+
+
+## 🔧 How to Reproduce the Analysis
+
+To replicate this analysis, please follow the steps below:
+
+**1. Clone the Repository:**
 ```bash
-# Replace <USER>/<REPO> with your GitHub username and repository name
 git clone https://github.com/SophiaYifei/college-scorecard-roi-storytelling.git
 cd college-scorecard-roi-storytelling
 ```
-### ⚙️ Step 2: Set up the Python Environment
-```bash
-# Create and activate a virtual environment
-python3 -m venv .venv
-source .venv/bin/activate   # On Windows: .venv\Scripts\activate
 
-# Install all required libraries
+**2. Set up a Virtual Environment (Recommended):**
+```bash
+python -m venv venv
+source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+```
+
+**3. Install Dependencies:**
+All required Python libraries are listed in the `requirements.txt` file.
+```bash
 pip install -r requirements.txt
 ```
-### 🧹 Step 3: Run the Data Preprocessing Pipeline
-- **Action:** Open `notebooks/notebook1.ipynb` in Jupyter and run all cells.  
-- **Output:** A clean dataset saved to `data/processed/field_of_study_processed.csv`.  
 
----
+**4. Run the Jupyter Notebooks:**
+The analysis is divided into three notebooks, which should be run in the following order:
 
-### 📊 Step 4: Run the Exploratory Data Analysis (EDA)
-- **Action:** Open `notebooks/notebook2.ipynb` in Jupyter and run all cells.  
-- **Output:** Key findings and charts for the final report & presentation.  
+* **`notebooks/01_preprocess.ipynb`**: This notebook downloads the raw "Field of Study" data, cleans it, performs feature engineering (e.g., creating an ROI score), and saves the processed data to `data/processed/`.
+* **`notebooks/02_analysis.ipynb`**: This notebook conducts the primary exploratory data analysis (EDA) on the processed data from the previous step, generating key visualizations about ROI.
+* **`notebooks/03_fairness.ipynb`**: This notebook downloads the institution-level data to analyze the relationship between tuitions and earnings, student gender demographics and earnings, exploring the ethical dimensions of the data.
 
----
+After running these notebooks, the processed data will be available in the `data/processed` directory, and all figures will be saved in the `figures` directory.
 
-## 3️⃣ The Data
 
-This section details the dataset used: **`field_of_study_processed.csv`**
 
-**Source**
-- Public data from the U.S. Department of Education’s [College Scorecard](https://collegescorecard.ed.gov/data/)  
-- **Raw Data File:** `Most-Recent-Cohorts-Field-of-Study.csv`  
-- **Size:** 26,905 reliable records across 18 fields  
+## 📁 Project Structure
 
----
+```
+.
+├── data
+│   ├── processed/      # Cleaned data generated by notebooks
+│   └── raw/            # Raw data is downloaded here by notebooks
+├── figures/            # Visualizations generated by notebooks
+├── notebooks/
+│   ├── 01_preprocess.ipynb
+│   ├── 02_analysis.ipynb
+│   └── 03_fairness.ipynb
+├── .gitignore
+├── LICENSE
+├── README.md
+└── requirements.txt
+```
 
-### 🔑 Key Metrics (Engineered)
-- **`ROI_EARNINGS_TO_DEBT` (float64):** Earnings-to-Debt Ratio = `EARN_MDN_5YR / DEBT_ALL_STGP_ANY_MDN`  
-  - Higher = better ROI  
 
-- **`PAYBACK_YEARS` (float64):** Payback Period (years) = `DEBT_ALL_STGP_ANY_MDN / EARN_MDN_5YR`  
-  - Lower = better  
 
-- **`MONTHLY_PAYMENT_PCT` (float64):** Monthly Loan Burden (%)  
-  - Formula: `(DEBT_ALL_STGP_ANY_MDN10YRPAY / (EARN_MDN_5YR / 12)) * 100`  
+## 🤔 Ethical Considerations & Limitations
 
----
+While the College Scorecard is a valuable resource, it's crucial to acknowledge its limitations:
 
-### 🏷️ Categorical Labels (Engineered)
-- **`MAJOR_FIELD` (object):** Broad study field (*Engineering*, *Business*, etc.)  
-- **`ROI_CATEGORY` (category):** ROI rating (*Poor*, *Average*, *Excellent*)  
-- **`AFFORDABILITY` (category):** Affordability rating (*Affordable*, *Expensive*)  
-- **`CREDENTIAL_LEVEL_NAME` (object):** Human-readable credential (e.g., *Bachelor Degree*)  
-- **`CIP_2DIGIT` (object):** First two digits of `CIPCODE`  
+* **Definition of ROI:** Our ROI metric (median earnings / median debt) is a simplification. It does not account for factors like quality of life, job satisfaction, career progression, or non-monetary benefits of education.
+* **Data Representation:** The data may not represent all institutions equally. Smaller institutions or those with fewer federal student aid recipients may have less comprehensive data available.
+* **Salary Variation:** Reported earnings are not adjusted for regional differences in cost of living, which can significantly impact the true value of a salary.
+* **Bias in Demographics:** The analysis in `03_fairness.ipynb` reveals a correlation between institutional gender composition and graduate earnings. This highlights potential systemic biases and emphasizes that institutional averages can obscure deeper inequities.
+* **Incomplete Costs:** The debt figures primarily reflect federal student loans and may not include private loans or the full cost of attendance (e.g., living expenses).
 
----
+Our story aims to be a starting point for inquiry, not a definitive guide. We encourage users to consider these limitations and use this data as one of many tools in their decision-making process.
 
-### 🏫 Program & Institution Identifiers (Source)
-- **`INSTNM` (object):** Institution name  
-- **`CIPCODE` (int64):** 6-digit program code  
-- **`CIPDESC` (object):** Program description  
-- **`CREDLEV` (int64):** Credential code (e.g., 3 = Bachelor’s)  
-- **`CREDDESC` (object):** Credential description  
-- **`CONTROL` (object):** Institution control (*Public*, *Private nonprofit*)  
-- **`IPEDSCOUNT2` (float64):** Number of graduates  
-
----
-
-### 💰 Core Financials (Source)
-- **`EARN_MDN_5YR` (float64):** Median earnings 5 years after graduation  
-- **`DEBT_ALL_STGP_ANY_MDN` (float64):** Median federal loan debt  
-- **`DEBT_ALL_STGP_ANY_MDN10YRPAY` (float64):** Median monthly loan payment (10-year plan)  
-
----
-
-## 4️⃣ License
+## 📄 License
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.

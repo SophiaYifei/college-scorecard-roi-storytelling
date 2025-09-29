@@ -1,8 +1,7 @@
 pandas
-gdown
-pathlib
 numpy
-seaborn
 matplotlib
+seaborn
 statsmodels
-warnings
+gdown
+jupyterlab

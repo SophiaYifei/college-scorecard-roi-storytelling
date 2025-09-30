@@ -119,18 +119,5 @@ After running these notebooks, the processed data will be available in the `data
 
 
 
-
-## 🤔 Ethical Considerations & Limitations
-
-While the College Scorecard is a valuable resource, it's crucial to acknowledge its limitations:
-
-* **Definition of ROI:** Our ROI metric (median earnings / median debt) is a simplification. It does not account for factors like quality of life, job satisfaction, career progression, or non-monetary benefits of education.
-* **Data Representation:** The data may not represent all institutions equally. Smaller institutions or those with fewer federal student aid recipients may have less comprehensive data available.
-* **Salary Variation:** Reported earnings are not adjusted for regional differences in cost of living, which can significantly impact the true value of a salary.
-* **Bias in Demographics:** The analysis in `03_fairness.ipynb` reveals a correlation between institutional gender composition and graduate earnings. This highlights potential systemic biases and emphasizes that institutional averages can obscure deeper inequities.
-* **Incomplete Costs:** The debt figures primarily reflect federal student loans and may not include private loans or the full cost of attendance (e.g., living expenses).
-
-Our story aims to be a starting point for inquiry, not a definitive guide. We encourage users to consider these limitations and use this data as one of many tools in their decision-making process.
-
 ## 📄 License
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
